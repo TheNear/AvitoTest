@@ -1,0 +1,10 @@
+.header {
+  font-family: 'Roboto Condensed', sans-serif;
+  text-transform: uppercase;
+  padding: 15px 0;
+}
+
+.title {
+  text-align: center;
+  font-size: 36px;
+}

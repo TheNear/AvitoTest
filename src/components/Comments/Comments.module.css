@@ -1,0 +1,29 @@
+.list {
+  grid-area: comment;
+  order: 9;
+  overflow-y: auto;
+  height: 0;
+  min-height: 100%;
+}
+
+
+.wrapper {
+  font-family: inherit;
+  padding: 5px 0;
+  font-size: 13px;
+}
+
+.date {
+  color: #999999;
+  margin-bottom: 5px;
+}
+
+.text {
+  margin-bottom: 5px;
+}
+
+@media only screen and (max-width: 320px) {
+  .list {
+    padding: 0 20px;
+  }
+}

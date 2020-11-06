@@ -1,0 +1,12 @@
+.footer {
+  width: 100%;
+  font-family: 'Roboto Condensed', sans-serif;
+  text-align: center;
+  border-top: 1px solid #CCCCCC;
+  color: #CCCCCC;
+  padding: 15px 0;
+}
+
+.copyright {
+  font-size: 14px;
+}
