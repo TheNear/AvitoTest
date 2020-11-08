@@ -1,4 +1,5 @@
 import React, { Component, ReactNode } from "react";
+import { getThumbnailsData } from "../../assets/js/api";
 import { Modal } from "../../components/Modal/Modal";
 import { ThumbnailList } from "../../components/ThumbnailList/ThumbnailList";
 import { IFullImage, IThumbnails } from "../../types/data";
@@ -6,44 +7,45 @@ import { IFullImage, IThumbnails } from "../../types/data";
 // export interface GalleryProps {}
 
 export interface GalleryState {
-  thumbnailsData: IThumbnails[];
+  data: IThumbnails[];
   openedImage: IFullImage | null;
+  // error: string;
 }
 
 class Gallery extends Component<unknown, GalleryState> {
   constructor(props: unknown) {
     super(props);
     this.state = {
-      thumbnailsData: [],
+      data: [],
       openedImage: null,
+      // error: "",
     };
-
-    this.showImage = this.showImage.bind(this);
-    this.onThumbnailClick = this.onThumbnailClick.bind(this);
-    this.onCloseButtonClick = this.onCloseButtonClick.bind(this);
   }
 
-  componentDidMount(): void {
-    fetch("https://boiling-refuge-66454.herokuapp.com/images")
-      .then((res) => res.json())
-      .then((thumnails: IThumbnails[]) => {
-        this.setState({
-          thumbnailsData: thumnails,
-        });
-      });
-  }
+  loadData = async (): Promise<void> => {
+    try {
+      const data = await getThumbnailsData();
+      this.setState({ data });
+    } catch (error) {
+      // this.setState({ error: error.message });
+    }
+  };
 
-  onThumbnailClick(id: number): void {
+  componentDidMount = (): void => {
+    this.loadData();
+  };
+
+  onThumbnailClick = (id: number): void => {
     this.showImage(id);
-  }
+  };
 
-  onCloseButtonClick(): void {
+  onCloseButtonClick = (): void => {
     this.setState({
       openedImage: null,
     });
-  }
+  };
 
-  showImage(id: number): void {
+  showImage = (id: number): void => {
     fetch(`https://boiling-refuge-66454.herokuapp.com/images/${id}`)
       .then((res) => res.json())
       .then((image: IFullImage) => {
@@ -51,14 +53,14 @@ class Gallery extends Component<unknown, GalleryState> {
           openedImage: image,
         });
       });
-  }
+  };
 
   render(): ReactNode {
-    const { openedImage, thumbnailsData } = this.state;
+    const { openedImage, data } = this.state;
 
     return (
       <>
-        <ThumbnailList data={thumbnailsData} clickHandler={this.onThumbnailClick} />
+        <ThumbnailList data={data} clickHandler={this.onThumbnailClick} />
         {openedImage && <Modal data={openedImage} closeModalHandler={this.onCloseButtonClick} />}
       </>
     );

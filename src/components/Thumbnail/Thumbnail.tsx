@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 import { IThumbnails } from "../../types/data";
 import style from "./Thumbnail.module.css";
 
@@ -8,14 +8,13 @@ interface ThumbnailProps {
 }
 
 const Thumbnail: React.FC<ThumbnailProps> = ({ data, clickHandler }) => {
+  const onButtonClick = (evt: MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    clickHandler(data.id);
+  };
+
   return (
-    <button
-      onClick={() => {
-        clickHandler(data.id);
-      }}
-      key={data.id}
-      type="button"
-      className={style.button}>
+    <button onClick={onButtonClick} key={data.id} type="button" className={style.button}>
       <img className={style.image} src={data.url} alt="thumbnail" />
     </button>
   );

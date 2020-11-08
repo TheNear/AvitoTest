@@ -17,6 +17,20 @@ class Modal extends Component<ModalProps, unknown> {
     this.state = {};
   }
 
+  pressEscHandler = ({ key }: KeyboardEvent): void => {
+    if (key === "Escape") {
+      this.props.closeModalHandler();
+    }
+  };
+
+  componentDidMount = (): void => {
+    window.addEventListener("keydown", this.pressEscHandler);
+  };
+
+  componentWillUnmount = (): void => {
+    window.removeEventListener("keydown", this.pressEscHandler);
+  };
+
   render(): ReactNode {
     const { data, closeModalHandler } = this.props;
 

@@ -4,7 +4,14 @@ import style from "./CommentForm.module.css";
 const CommentForm: React.FC = () => {
   return (
     <form action="push" className={style.form}>
-      <input type="text" name="name" id="" placeholder="Ваше имя" className={style.input} />
+      <input
+        autoFocus
+        type="text"
+        name="name"
+        id=""
+        placeholder="Ваше имя"
+        className={style.input}
+      />
       <input
         type="text"
         name="content"

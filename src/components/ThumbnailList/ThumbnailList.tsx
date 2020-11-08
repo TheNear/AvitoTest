@@ -12,7 +12,7 @@ const ThumbnailList: React.FC<ThumbnailListProps> = ({ data, clickHandler }) => 
   return (
     <main className={style.thumbnails}>
       {data.map((thumbnail: IThumbnails) => (
-        <Thumbnail data={thumbnail} clickHandler={clickHandler} />
+        <Thumbnail key={thumbnail.id} data={thumbnail} clickHandler={clickHandler} />
       ))}
     </main>
   );
