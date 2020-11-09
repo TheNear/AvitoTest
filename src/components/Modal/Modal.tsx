@@ -1,29 +1,44 @@
 import React, { Component, ReactNode } from "react";
 import style from "./Modal.module.css";
-import { ICommpentPost, IFullImage } from "../../types/data";
+import { ICommentPost, IFullImage } from "../../types/data";
 import { CommentForm } from "../CommentForm/CommentForm";
 import { Comments } from "../Comments/Comments";
-import { postComment } from "../../assets/js/api";
+import { getFullImgData, postComment } from "../../assets/js/api";
+import { generateComments } from "../../assets/js/helpers";
 
 export interface ModalProps {
-  data: IFullImage;
+  id: number;
   closeModalHandler: () => void;
 }
 
 export interface ModalState {
-  form: ICommpentPost;
+  data: IFullImage | null;
+  form: ICommentPost;
 }
 
 class Modal extends Component<ModalProps, ModalState> {
   constructor(props: ModalProps) {
     super(props);
     this.state = {
+      data: null,
       form: {
         name: "",
         comment: "",
       },
     };
   }
+
+  getImageData = async (): Promise<void> => {
+    try {
+      const data = await getFullImgData(this.props.id);
+      this.setState((prevState) => ({
+        ...prevState,
+        data,
+      }));
+    } catch {
+      // d
+    }
+  };
 
   changeInputHandler = ({ currentTarget }: React.FormEvent<HTMLInputElement>): void => {
     const { value, name } = currentTarget;
@@ -33,7 +48,7 @@ class Modal extends Component<ModalProps, ModalState> {
           form: {
             ...prevState.form,
             [name]: value,
-          } as { [T in keyof ICommpentPost]: ICommpentPost[T] },
+          } as { [T in keyof ICommentPost]: ICommentPost[T] },
         } as ModalState)
     );
   };
@@ -41,9 +56,19 @@ class Modal extends Component<ModalProps, ModalState> {
   submitHandler = async (evt: React.FormEvent<HTMLFormElement>): Promise<void> => {
     evt.preventDefault();
     try {
-      const postID = this.props.data.id;
+      const postID = this.props.id;
+      const newComment = generateComments(this.state.form);
       await postComment(postID, this.state.form);
-      this.setState({ form: { name: "", comment: "" } });
+      this.setState((prevState) => {
+        if (prevState.data) {
+          return {
+            data: { ...prevState.data, comments: [...prevState.data.comments, newComment] },
+            form: { name: "", comment: "" },
+          };
+        }
+
+        return prevState;
+      });
     } catch (error) {
       // console.log(error.message);
     }
@@ -56,6 +81,7 @@ class Modal extends Component<ModalProps, ModalState> {
   };
 
   componentDidMount = (): void => {
+    this.getImageData();
     window.addEventListener("keydown", this.pressEscHandler);
   };
 
@@ -64,24 +90,29 @@ class Modal extends Component<ModalProps, ModalState> {
   };
 
   render(): ReactNode {
-    const { data, closeModalHandler } = this.props;
-    const { name, comment } = this.state.form;
+    const { closeModalHandler } = this.props;
+    const { data, form } = this.state;
+    const { name, comment } = form;
 
     return (
       <div className={style.background}>
-        <div className={style.container}>
-          <img className={style.image} src={data.url} alt="fullsize" />
-          <Comments data={data.comments} />
-          <CommentForm
-            name={name}
-            comment={comment}
-            submitHandler={this.submitHandler}
-            changeInputHandler={this.changeInputHandler}
-          />
-          <button onClick={closeModalHandler} type="button" className={style.button}>
-            Закрыть окно
-          </button>
-        </div>
+        {data ? (
+          <div className={style.container}>
+            <img className={style.image} src={data.url} alt="fullsize" />
+            <Comments data={data.comments} />
+            <CommentForm
+              name={name}
+              comment={comment}
+              submitHandler={this.submitHandler}
+              changeInputHandler={this.changeInputHandler}
+            />
+            <button onClick={closeModalHandler} type="button" className={style.button}>
+              Закрыть окно
+            </button>
+          </div>
+        ) : (
+          <div className={style.container}>Loading...</div>
+        )}
       </div>
     );
   }

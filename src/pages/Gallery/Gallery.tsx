@@ -1,14 +1,15 @@
 import React, { Component, ReactNode } from "react";
-import { getFullImgData, getThumbnailsData } from "../../assets/js/api";
+import { getThumbnailsData } from "../../assets/js/api";
 import { Modal } from "../../components/Modal/Modal";
 import { ThumbnailList } from "../../components/ThumbnailList/ThumbnailList";
-import { IFullImage, IThumbnails } from "../../types/data";
+import { IThumbnails } from "../../types/data";
 
 // export interface GalleryProps {}
 
 export interface GalleryState {
   data: IThumbnails[];
-  openedImage: IFullImage | null;
+  openedImageID: number | null;
+  isLoading: boolean;
   // error: string;
 }
 
@@ -16,18 +17,22 @@ class Gallery extends Component<unknown, GalleryState> {
   constructor(props: unknown) {
     super(props);
     this.state = {
+      isLoading: false,
       data: [],
-      openedImage: null,
+      openedImageID: null,
       // error: "",
     };
   }
 
   loadData = async (): Promise<void> => {
     try {
+      await this.setState({ isLoading: true });
       const data = await getThumbnailsData();
       this.setState({ data });
     } catch (error) {
       // this.setState({ error: error.message });
+    } finally {
+      this.setState({ isLoading: false });
     }
   };
 
@@ -36,31 +41,26 @@ class Gallery extends Component<unknown, GalleryState> {
   };
 
   onThumbnailClick = (id: number): void => {
-    this.showImage(id);
+    this.setState({ openedImageID: id });
   };
 
   onCloseButtonClick = (): void => {
     this.setState({
-      openedImage: null,
+      openedImageID: null,
     });
   };
 
-  showImage = async (id: number): Promise<void> => {
-    try {
-      const data = await getFullImgData(id);
-      this.setState({ openedImage: data });
-    } catch (error) {
-      // this.setState({ error: error.message });
-    }
-  };
-
   render(): ReactNode {
-    const { openedImage, data } = this.state;
+    const { openedImageID, data, isLoading } = this.state;
 
     return (
       <>
-        <ThumbnailList data={data} clickHandler={this.onThumbnailClick} />
-        {openedImage && <Modal data={openedImage} closeModalHandler={this.onCloseButtonClick} />}
+        {!isLoading ? (
+          <ThumbnailList data={data} clickHandler={this.onThumbnailClick} />
+        ) : (
+          <div>ЗАГРУЖАЕТСЯ</div>
+        )}
+        {openedImageID && <Modal id={openedImageID} closeModalHandler={this.onCloseButtonClick} />}
       </>
     );
   }

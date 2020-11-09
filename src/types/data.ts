@@ -4,7 +4,7 @@ export interface IComment {
   date: number;
 }
 
-export interface ICommpentPost {
+export interface ICommentPost {
   name: string;
   comment: string;
 }

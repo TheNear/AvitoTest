@@ -1,4 +1,4 @@
-import { ICommpentPost, IFullImage, IThumbnails } from "../../types/data";
+import { ICommentPost, IFullImage, IThumbnails } from "../../types/data";
 import { BASE_URL } from "./constants";
 
 export const get = async <T>(url: string): Promise<T> => {
@@ -29,7 +29,7 @@ export const getFullImgData = async (id: number): Promise<IFullImage> => {
   return get(`${BASE_URL}images/${id}`);
 };
 
-export const postComment = async (id: number, data: ICommpentPost): Promise<void> => {
+export const postComment = async (id: number, data: ICommentPost): Promise<void> => {
   const postUrl = `${BASE_URL}images/${id}/comments`;
   const jsonData = JSON.stringify(data);
   await post(postUrl, jsonData);

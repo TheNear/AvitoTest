@@ -1,3 +1,13 @@
+@keyframes showComment {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .list {
   grid-area: comment;
   order: 9;
@@ -11,6 +21,7 @@
   font-family: inherit;
   padding: 5px 0;
   font-size: 13px;
+  animation: showComment 0.3s ease;
 }
 
 .date {
