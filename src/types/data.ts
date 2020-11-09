@@ -4,6 +4,11 @@ export interface IComment {
   date: number;
 }
 
+export interface ICommpentPost {
+  name: string;
+  comment: string;
+}
+
 export interface IFullImage {
   id: number;
   url: string;

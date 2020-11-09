@@ -1,3 +1,14 @@
+@keyframes showModal {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
 .background {
   position: fixed;
   left: 0;
@@ -20,6 +31,7 @@
   max-width: 800px;
   width: 80%;
   padding: 30px;
+  animation: showModal .3s ease-in;
   background-color: #fff;
   grid-template-columns: 3fr 2fr;
   grid-template-areas: 

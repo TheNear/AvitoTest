@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from "react";
-import { getThumbnailsData } from "../../assets/js/api";
+import { getFullImgData, getThumbnailsData } from "../../assets/js/api";
 import { Modal } from "../../components/Modal/Modal";
 import { ThumbnailList } from "../../components/ThumbnailList/ThumbnailList";
 import { IFullImage, IThumbnails } from "../../types/data";
@@ -45,14 +45,13 @@ class Gallery extends Component<unknown, GalleryState> {
     });
   };
 
-  showImage = (id: number): void => {
-    fetch(`https://boiling-refuge-66454.herokuapp.com/images/${id}`)
-      .then((res) => res.json())
-      .then((image: IFullImage) => {
-        this.setState({
-          openedImage: image,
-        });
-      });
+  showImage = async (id: number): Promise<void> => {
+    try {
+      const data = await getFullImgData(id);
+      this.setState({ openedImage: data });
+    } catch (error) {
+      // this.setState({ error: error.message });
+    }
   };
 
   render(): ReactNode {
