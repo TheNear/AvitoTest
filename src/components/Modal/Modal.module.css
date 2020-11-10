@@ -55,6 +55,7 @@
   height: 23px;
   border: none;
   border-radius: 5px;
+  transition: transform 0.5s ease;
   background-color: rgba(255,255,255, 0.7);
   cursor: pointer;
 }
@@ -67,6 +68,7 @@
   content: "";
   left: 50%;
   right: 50%;
+  transition: background-color 0.2s ease-in, box-shadow 0.2 ease-in;
   transform: translate(-50%, -50%) rotate(45deg);
   background-color: black;
 }
@@ -79,8 +81,27 @@
   content: "";
   left: 50%;
   right: 50%;
+  transition: background-color 0.2s ease-in, box-shadow 0.2 ease-in;
   transform: translate(-50%, -50%) rotate(-45deg);
   background-color: black;
+}
+
+.button:focus {
+  outline: none;
+  transform: rotate(-180deg);
+}
+
+
+.button:focus:after,
+.button:hover:after {
+  background-color: red;
+  box-shadow: 0 0 4px 0 red;
+}
+
+.button:focus:before,
+.button:hover:before   {
+  background-color: red;
+  box-shadow: 0 0 4px 0 red;
 }
 
 @media only screen and (max-width: 768px) {

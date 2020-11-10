@@ -16,10 +16,22 @@
   max-width: 100%;
   margin: 15px 10px;
   animation: showThumbnail 1.4s ease;
+  transition: opacity 0.2s ease-in, transform 0.2s ease;
   font-size: 0;
 }
 
 .image {
   display: block;
   max-width: 100%;
+}
+
+.button:hover {
+  opacity: 0.8;
+  transform: translateY(-5%);
+}
+
+.button:focus {
+  outline: none;
+  opacity: 0.8;
+  transform: translateY(-5%);
 }

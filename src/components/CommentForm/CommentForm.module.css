@@ -31,6 +31,17 @@
   border-radius: 3px;
   color: white;
   font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in, box-shadow 0.2s ease-in;
+}
+
+.button:hover {
+  background-color: #3a86bd;
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 4px 2px #4997D0;
 }
 
 @media only screen and (max-width: 320px) {

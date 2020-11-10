@@ -1,0 +1,59 @@
+@keyframes showPopup {
+  from {
+    transform: translateX(200%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes hidePopup {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(200%);
+    opacity: 0;
+  }
+}
+
+.wrapper {
+  padding: 7px 13px;
+  max-width: calc(100vw - 50px);
+  overflow: hidden;
+  word-wrap: break-word;
+  text-align: right;
+  background-color: #fff;
+  border-radius: 5px;
+  margin: 5px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
+}
+
+.show {
+  animation: showPopup 0.5s ease;
+}
+
+.hidden {
+  animation: hidePopup 0.5s ease;
+  animation-fill-mode: forwards;
+}
+
+.error {
+  color: rgb(255, 69, 58);
+  box-shadow: rgba(255, 69, 58, 0.9) 0 1px 3px;
+}
+
+.warn {
+  color: rgb(255, 214, 10);
+  box-shadow: rgba(255, 214, 10, 0.9) 0 1px 3px;
+}
+
+.success {
+  color: rgb(48, 209, 88);
+  box-shadow: rgba(48, 209, 88, 0.9) 0 1px 3px;
+}

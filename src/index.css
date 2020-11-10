@@ -21,3 +21,9 @@ code {
   flex-direction: column;
   padding: 0 20px;
 }
+
+#popup {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+}

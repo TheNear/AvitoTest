@@ -1,16 +1,16 @@
 import React, { Component, ReactNode } from "react";
 import { getThumbnailsData } from "../../assets/js/api";
+import { EventPopup } from "../../components/EventPopup/EventPopup";
+import { Loader } from "../../components/Loader/Loader";
 import { Modal } from "../../components/Modal/Modal";
 import { ThumbnailList } from "../../components/ThumbnailList/ThumbnailList";
 import { IThumbnails } from "../../types/data";
-
-// export interface GalleryProps {}
 
 export interface GalleryState {
   data: IThumbnails[];
   openedImageID: number | null;
   isLoading: boolean;
-  // error: string;
+  error: string;
 }
 
 class Gallery extends Component<unknown, GalleryState> {
@@ -20,9 +20,13 @@ class Gallery extends Component<unknown, GalleryState> {
       isLoading: false,
       data: [],
       openedImageID: null,
-      // error: "",
+      error: "",
     };
   }
+
+  clearErrors = (): void => {
+    this.setState({ error: "" });
+  };
 
   loadData = async (): Promise<void> => {
     try {
@@ -30,7 +34,7 @@ class Gallery extends Component<unknown, GalleryState> {
       const data = await getThumbnailsData();
       this.setState({ data });
     } catch (error) {
-      // this.setState({ error: error.message });
+      this.setState({ error: error.message });
     } finally {
       this.setState({ isLoading: false });
     }
@@ -51,14 +55,15 @@ class Gallery extends Component<unknown, GalleryState> {
   };
 
   render(): ReactNode {
-    const { openedImageID, data, isLoading } = this.state;
+    const { openedImageID, data, isLoading, error } = this.state;
 
     return (
       <>
+        {error && <EventPopup content={error} clear={this.clearErrors} popupType="error" />}
         {!isLoading ? (
           <ThumbnailList data={data} clickHandler={this.onThumbnailClick} />
         ) : (
-          <div>ЗАГРУЖАЕТСЯ</div>
+          <Loader />
         )}
         {openedImageID && <Modal id={openedImageID} closeModalHandler={this.onCloseButtonClick} />}
       </>

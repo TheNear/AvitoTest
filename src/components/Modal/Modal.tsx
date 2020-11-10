@@ -5,6 +5,7 @@ import { CommentForm } from "../CommentForm/CommentForm";
 import { Comments } from "../Comments/Comments";
 import { getFullImgData, postComment } from "../../assets/js/api";
 import { generateComments } from "../../assets/js/helpers";
+import { EventPopup } from "../EventPopup/EventPopup";
 
 export interface ModalProps {
   id: number;
@@ -14,12 +15,14 @@ export interface ModalProps {
 export interface ModalState {
   data: IFullImage | null;
   form: ICommentPost;
+  error: string;
 }
 
 class Modal extends Component<ModalProps, ModalState> {
   constructor(props: ModalProps) {
     super(props);
     this.state = {
+      error: "",
       data: null,
       form: {
         name: "",
@@ -28,6 +31,10 @@ class Modal extends Component<ModalProps, ModalState> {
     };
   }
 
+  clearErrors = (): void => {
+    this.setState({ error: "" });
+  };
+
   getImageData = async (): Promise<void> => {
     try {
       const data = await getFullImgData(this.props.id);
@@ -35,8 +42,8 @@ class Modal extends Component<ModalProps, ModalState> {
         ...prevState,
         data,
       }));
-    } catch {
-      // d
+    } catch (error) {
+      this.setState({ error: error.message });
     }
   };
 
@@ -62,6 +69,7 @@ class Modal extends Component<ModalProps, ModalState> {
       this.setState((prevState) => {
         if (prevState.data) {
           return {
+            ...prevState,
             data: { ...prevState.data, comments: [...prevState.data.comments, newComment] },
             form: { name: "", comment: "" },
           };
@@ -70,7 +78,7 @@ class Modal extends Component<ModalProps, ModalState> {
         return prevState;
       });
     } catch (error) {
-      // console.log(error.message);
+      this.setState({ error: error.message });
     }
   };
 
@@ -91,11 +99,12 @@ class Modal extends Component<ModalProps, ModalState> {
 
   render(): ReactNode {
     const { closeModalHandler } = this.props;
-    const { data, form } = this.state;
+    const { data, form, error } = this.state;
     const { name, comment } = form;
 
     return (
       <div className={style.background}>
+        {error && <EventPopup content={error} clear={this.clearErrors} popupType="error" />}
         {data ? (
           <div className={style.container}>
             <img className={style.image} src={data.url} alt="fullsize" />
